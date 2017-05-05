@@ -21,22 +21,24 @@ def build_quiz(question_count, question_store):
         #get standards associated with strand option
         standard_options = question_store.strands[strand_pick]
         if strand_pick in standard_last_used:
-            if standard_last_used[strand_pick] == len(standard_options) - 1:
+            if standard_last_used[strand_pick] == len(standard_options):
                 standard_last_used[strand_pick] = 0
                 standard_pick = standard_options[0]
                 question_numbers += random.choice(question_store.standards[standard_pick].questions)
                 question_numbers += ","
             else:
                 #we still have more standards to pick!
-                standard_last_used[strand_pick] = standard_last_used[strand_pick] + 1
                 standard_pick = standard_options[standard_last_used[strand_pick]]
                 question_numbers += random.choice(question_store.standards[standard_pick].questions)
                 question_numbers += ","
+                standard_last_used[strand_pick] = standard_last_used[strand_pick] + 1
         else:
+            #we're not tracking this strand yet
             standard_pick = standard_options[0]
             standard_last_used[strand_pick] = 0
             question_numbers += random.choice(question_store.standards[standard_pick].questions)
             question_numbers += ","
+            standard_last_used[strand_pick] = standard_last_used[strand_pick] + 1
         if strand_index == strand_count - 1:
             strand_index = 0
         else:
